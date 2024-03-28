@@ -20,7 +20,7 @@ FILE_HANDLER_FORMAT = (
 
 def get_file_handler(
     log_path: str = LOG_FILEPATH,
-) -> logging.handlers.TimedRotatingFileHandler:
+) -> logging.handlers.TimedRotatingFileHandler:  # 특정 주기를 가지고 이전에 로그는 다 날라감
     """로그 저장 파일 핸드러를 설정하는 함수
 
     Args:
@@ -34,9 +34,10 @@ def get_file_handler(
     )
     file_handler.suffix = "logs-%Y%m%d"
     # TODO: 파일 핸들러의 기본 수준을 INFO로 설정
-    
+    file_handler.setLevel(logging.INFO)
+
     # TODO: 파일 핸들러의 포맷을 FILE_HANDLER_FORMAT으로 설정
-    
+    file_handler.setFormatter(logging.Formatter(FILE_HANDLER_FORMAT))
     return file_handler
 
 
@@ -56,12 +57,16 @@ def set_logger(log_path: str = LOG_FILEPATH) -> logging.Logger:
     )
 
     logger = logging.getLogger("rich")
-    
+
     # TODO: 로거의 기본 수준을 DEBUG 설정
-    
+    logger.setLevel(logging.DEBUG)
     # TODO: 기본 로거에 위에서 만든 파일 핸들러를 추가
-    
+    logger.addHandler(get_file_handler(log_path))
     return logger
+
+
+# 전체 코드에서 에러가 어디서 나는지 확인하고 싶으면 아래 코드를 사용하면 됨.
+# 아래 코드를 불러오면, 따로 로그처리 안해도 에러가 나와도 로그가 저장이 된다.
 
 
 def handle_exception(exc_type, exc_value, exc_traceback):

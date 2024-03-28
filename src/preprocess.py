@@ -26,7 +26,7 @@ def extract_floor(floor_info: str) -> int:
     split_floor_info = floor_info.split()
     floor_str = split_floor_info[0]
 
-    return int(floor_str) if floor_str.isnumberic() else 0
+    return int(floor_str) if floor_str.isnumeric() else 0
 
 
 # extract_floor()가 str -> int라서, 이걸 감싸는 Wrapping function임
@@ -52,9 +52,12 @@ def floor_extractor(df: pd.DataFrame, col: str) -> pd.DataFrame:
 # 1. 방의 크기는 제곱근을 적용함 (FunctionTransformer 사용)
 # 2. 층수는 실제 층수를 추출하되 숫자가 아닌 Basement 등은 0층으로 표기함
 # 3. 범주형 변수(CAT_FEATURES)는 타겟 인코딩 적용 (from category_encoders import TargetEncoder)
+# ColumnTransform 으로 만드는 객체에는 Transform이 무조건 존재함. fit은 있을 수도 있고, 없을 수도 있음
+
 preprocess_pipeline = ColumnTransformer(
     transformers=[
-        ("sqrt_transformer", FunctionTransformer(np.sqrt), ["size"])(
+        ("sqrt_transformer", FunctionTransformer(np.sqrt), ["size"]),
+        (
             "floor_extractor",
             FunctionTransformer(floor_extractor, kw_args={"col": "floor"}),
             ["floor"],
