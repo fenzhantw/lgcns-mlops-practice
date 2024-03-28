@@ -50,8 +50,8 @@ source .venv/bin/activate
 
 ```yaml
 dependencies = [
-    "bentoml=1.2.6",
-    "scikit-learn=1.3.2",
+    "bentoml==1.2.6",
+    "scikit-learn==1.3.2",
     "pandas==2.1.4",
     "numpy==1.26.4",
     "mlflow==2.11.1",
